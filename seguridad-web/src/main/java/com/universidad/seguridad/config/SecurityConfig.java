@@ -1,18 +1,24 @@
 package com.universidad.seguridad.config;
 
+import com.universidad.seguridad.security.ApiErrorWriter;
+import com.universidad.seguridad.security.JwtAuthFilter;
 import com.universidad.seguridad.security.UsuarioDetailsService;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -39,6 +45,50 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(DaoAuthenticationProvider authProvider) {
         return new ProviderManager(authProvider);
+    }
+
+    // JwtAuthFilter es @Component: Spring Boot lo registraria ademas como
+    // filtro global de Servlets (todas las rutas). Se desactiva ese registro
+    // para que SOLO se ejecute dentro de apiFilterChain.
+    @Bean
+    public FilterRegistrationBean<JwtAuthFilter> jwtAuthFilterRegistration(JwtAuthFilter filter) {
+        FilterRegistrationBean<JwtAuthFilter> registro = new FilterRegistrationBean<>(filter);
+        registro.setEnabled(false);
+        return registro;
+    }
+
+    // Cadena de filtros para la API REST - stateless con JWT.
+    // @Order(1): se evalua ANTES que webFilterChain (@Order(2)): mas
+    // especifico primero, siguiendo la practica recomendada de Spring
+    // Security para multiples SecurityFilterChain.
+    @Bean
+    @Order(1)
+    public SecurityFilterChain apiFilterChain(HttpSecurity http,
+                                              JwtAuthFilter jwtAuthFilter,
+                                              ApiErrorWriter apiErrorWriter) throws Exception {
+        http
+            .securityMatcher("/api/**") // esta cadena SOLO aplica a /api/**
+            .csrf(csrf -> csrf.disable()) // correcto aqui: no hay cookie de
+                                          // sesion que un atacante pueda
+                                          // aprovechar; el token va en un
+                                          // header que un formulario cross-
+                                          // site no puede fijar por si solo
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+            )
+            // 401 (no 403) cuando falta el token o es invalido/expirado;
+            // 403 cuando el token es valido pero el rol no alcanza.
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(apiErrorWriter.entryPoint())
+                .accessDeniedHandler(apiErrorWriter.accessDeniedHandler())
+            )
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
     // Cadena de filtros para las vistas web con Thymeleaf - basada en
