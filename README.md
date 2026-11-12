@@ -347,7 +347,7 @@ Hay una limitación conocida del enfoque stateless: un token emitido sigue siend
 
 ## Capturas de pantalla
 
-> Las capturas deben tomarse sobre la aplicación en ejecución y guardarse en `capturas/` con estos nombres.
+> Las capturas deben tomarse sobre la aplicación en ejecución y guardarse en `capturas/` con estos nombres. 
 
 ![Formulario de login](capturas/login.png)
 ![Dashboard con th:text seguro](capturas/dashboard-seguro.png)
