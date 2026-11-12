@@ -15,16 +15,10 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Errores JSON para los controladores REST (solo /api/**).
- * Las AccessDeniedException de @PreAuthorize NO se capturan aqui: se dejan
- * llegar a Spring Security, que responde 403 con ApiErrorWriter.
- */
 @RestControllerAdvice(assignableTypes = {
         ApiAuthController.class, ApiTareaController.class, ApiAdminController.class})
 public class ApiExceptionHandler {
 
-    // Credenciales incorrectas, usuario inexistente o deshabilitado en /api/auth/login
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Map<String, Object>> credencialesInvalidas(AuthenticationException e) {
         return respuesta(HttpStatus.UNAUTHORIZED, "Credenciales inválidas");
