@@ -8,10 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-/**
- * Carga el usuario desde MySQL para Spring Security.
- * Lo usan tanto el form-login (Parte 1) como POST /api/auth/login (Parte 2).
- */
+
 @Service
 public class UsuarioDetailsService implements UserDetailsService {
 
@@ -29,8 +26,8 @@ public class UsuarioDetailsService implements UserDetailsService {
 
         return User.builder()
                 .username(u.getEmail())
-                .password(u.getContrasenia())               // BCrypt hash
-                .roles(u.getRol().replace("ROLE_", ""))     // "ADMIN" o "USER"
+                .password(u.getContrasenia())              
+                .roles(u.getRol().replace("ROLE_", ""))     
                 .disabled(!u.isActivo())
                 .build();
     }
