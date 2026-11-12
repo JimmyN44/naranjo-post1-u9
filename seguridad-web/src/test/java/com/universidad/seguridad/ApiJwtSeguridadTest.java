@@ -16,7 +16,6 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/** Parte 2: API REST stateless protegida con JWT y coexistencia con la sesion. */
 class ApiJwtSeguridadTest extends IntegracionBase {
 
     @Autowired private ObjectMapper mapper;
@@ -118,7 +117,6 @@ class ApiJwtSeguridadTest extends IntegracionBase {
 
         @Test
         void tokenExpiradoDevuelve401() throws Exception {
-            // Mismo secreto que la aplicacion, pero con expiracion en el pasado
             String expirado = new JwtUtil(JWT_SECRET_PRUEBA, -1_000).generarToken(USER_EMAIL, "ROLE_USER");
             mvc.perform(get("/api/tareas").header("Authorization", bearer(expirado)))
                     .andExpect(status().isUnauthorized());
@@ -230,7 +228,6 @@ class ApiJwtSeguridadTest extends IntegracionBase {
             MockHttpSession sesion = loginSesion(ADMIN_EMAIL, ADMIN_PASS);
             String token = loginApi(ADMIN_EMAIL, ADMIN_PASS);
 
-            // Intercalado: la sesion web sigue viva mientras se usa la API
             mvc.perform(get("/dashboard").session(sesion)).andExpect(status().isOk());
             mvc.perform(get("/api/tareas").header("Authorization", bearer(token))).andExpect(status().isOk());
             mvc.perform(get("/admin").session(sesion)).andExpect(status().isOk());
