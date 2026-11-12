@@ -3,7 +3,6 @@ package com.universidad.seguridad.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-/** Datos del formulario para crear una tarea (el propietario lo fija el servidor). */
 public class TareaForm {
 
     @NotBlank(message = "El título es obligatorio")
