@@ -58,9 +58,7 @@ public class AuthController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, Authentication auth) {
-        // La guia pasaba auth.getName() (el email), que nunca puede contener
-        // un payload XSS porque @Email lo rechaza. Se pasa el NOMBRE del
-        // usuario, campo de texto libre, para que la prueba XSS sea real.
+       
         Usuario usuario = service.buscarPorEmail(auth.getName());
         model.addAttribute("usuario", usuario.getNombre());
         model.addAttribute("email", usuario.getEmail());
