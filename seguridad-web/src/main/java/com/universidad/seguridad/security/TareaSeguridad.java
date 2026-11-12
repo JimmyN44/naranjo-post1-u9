@@ -6,13 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Comprobaciones de propiedad usadas desde @PreAuthorize, por ejemplo:
- *   @PreAuthorize("hasRole('ADMIN') or @tareaSeguridad.esMismoUsuario(#usuarioId, authentication)")
- *
- * Se basan en authentication.getName(), que es el email tanto en la
- * cadena de sesion (UserDetails.username) como en la cadena JWT (subject).
- */
+
 @Component("tareaSeguridad")
 public class TareaSeguridad {
 
@@ -34,8 +28,6 @@ public class TareaSeguridad {
                 .orElse(false);
     }
 
-    // Si la tarea no existe se devuelve false (403) en lugar de 404,
-    // para no revelar a un USER que ids de tareas ajenas existen.
     @Transactional(readOnly = true)
     public boolean esPropietarioDeTarea(Long tareaId, Authentication auth) {
         if (tareaId == null || auth == null) {
