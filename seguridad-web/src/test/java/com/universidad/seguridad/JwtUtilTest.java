@@ -6,10 +6,8 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/** Pruebas unitarias de generacion y validacion de JWT (Parte 2, Paso 2). */
 class JwtUtilTest {
 
-    // Claves aleatorias por ejecucion: ninguna clave queda escrita en el codigo
     private static final String CLAVE_A = claveAleatoria();
     private static final String CLAVE_B = claveAleatoria();
 
@@ -47,7 +45,6 @@ class JwtUtilTest {
     void rechazaTokenConPayloadAlterado() {
         JwtUtil jwt = new JwtUtil(CLAVE_A, 60_000);
         String[] partes = jwt.generarToken("user@universidad.edu", "ROLE_USER").split("\\.");
-        // Payload falsificado con rol ADMIN reutilizando la firma original
         String payloadFalso = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(
                 "{\"sub\":\"user@universidad.edu\",\"rol\":\"ROLE_ADMIN\"}".getBytes());
         assertThat(jwt.esValido(partes[0] + "." + payloadFalso + "." + partes[2])).isFalse();
@@ -55,7 +52,7 @@ class JwtUtilTest {
 
     @Test
     void rechazaTokenExpirado() {
-        JwtUtil jwt = new JwtUtil(CLAVE_A, -1_000); // expiro hace 1 segundo
+        JwtUtil jwt = new JwtUtil(CLAVE_A, -1_000); 
         String token = jwt.generarToken("user@universidad.edu", "ROLE_USER");
         assertThat(jwt.esValido(token)).isFalse();
     }
@@ -75,7 +72,6 @@ class JwtUtilTest {
                 .hasMessageContaining("JWT_SECRET");
     }
 
-    /** Cambia un caracter en medio de la firma (no el ultimo, que puede ser relleno). */
     static String alterarFirma(String token) {
         int i = token.lastIndexOf('.') + 10;
         char c = token.charAt(i) == 'A' ? 'B' : 'A';
