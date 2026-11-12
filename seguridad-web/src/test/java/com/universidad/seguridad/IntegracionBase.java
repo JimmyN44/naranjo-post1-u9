@@ -18,15 +18,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
-/**
- * Base comun de las pruebas de integracion: levanta la aplicacion completa
- * (las dos SecurityFilterChain reales) contra H2 y prepara datos conocidos.
- */
+
 @SpringBootTest
 @AutoConfigureMockMvc
 abstract class IntegracionBase {
 
-    // Clave JWT aleatoria por ejecucion: ninguna clave queda en el codigo
     static final String JWT_SECRET_PRUEBA = JwtUtilTest.claveAleatoria();
 
     static final String ADMIN_EMAIL = "admin@universidad.edu";
@@ -63,7 +59,6 @@ abstract class IntegracionBase {
         tareaOtro = tareaRepo.save(new Tarea("Tarea privada de user2", "No visible para user1", otro));
     }
 
-    /** Login REAL por formulario (cadena de sesion); devuelve la sesion autenticada. */
     protected MockHttpSession loginSesion(String email, String pass) throws Exception {
         MvcResult r = mvc.perform(formLogin("/login").user(email).password(pass))
                 .andExpect(redirectedUrl("/dashboard"))
