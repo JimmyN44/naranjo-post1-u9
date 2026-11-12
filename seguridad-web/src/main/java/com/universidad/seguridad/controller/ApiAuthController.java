@@ -26,12 +26,7 @@ public class ApiAuthController {
 
     @PostMapping("/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest req) {
-        // Reutiliza el MISMO AuthenticationManager/UserDetailsService/
-        // BCryptPasswordEncoder de la Parte 1: las credenciales se
-        // validan exactamente igual, solo cambia lo que se devuelve
-        // al final (un token en vez de una cookie de sesion).
-        // Si las credenciales no son validas se lanza AuthenticationException,
-        // que ApiExceptionHandler traduce a 401 sin emitir token.
+       
         Authentication auth = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.email().trim().toLowerCase(), req.contrasenia())
         );
