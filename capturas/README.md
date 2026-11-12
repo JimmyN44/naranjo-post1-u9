@@ -21,4 +21,4 @@ Las capturas se generaron automáticamente, con ayuda de Claude Code, sobre la a
 - **Terminal:** cada comando `curl` se ejecutó en una terminal xterm real y se fotografió su ventana. En `jwt-login.png` las credenciales se envían desde un archivo (`-d @login.json`) para no mostrar la contraseña del ADMIN.
 - **XSS con `th:utext`:** se usó una **copia temporal** del proyecto con la línea insegura, ejecutada en el puerto `8082` (por eso esa URL en la captura). El código del repositorio no contiene `th:utext`.
 
-Para repetirlas manualmente, siga la sección "Pruebas de seguridad" del README principal.
+Para repetirlas manualmente, siga la sección "Pruebas de seguridad" del README principal. 
