@@ -15,15 +15,7 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Respuestas de error JSON para la cadena /api/**.
- *
- * Sin un AuthenticationEntryPoint explicito, una cadena sin formLogin ni
- * httpBasic responde 403 (Http403ForbiddenEntryPoint) a las peticiones sin
- * token; la guia espera 401. Este componente fija:
- *   - 401 Unauthorized: falta el token o es invalido/expirado.
- *   - 403 Forbidden   : token valido pero sin el rol requerido.
- */
+
 @Component
 public class ApiErrorWriter {
 
