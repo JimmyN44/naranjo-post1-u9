@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Acceso denegado')}"></head>
+<body>
+<main class="contenedor estrecho">
+    <h1>403 - Acceso denegado</h1>
+    <p>No tiene permisos para acceder a este recurso.</p>
+    <p><a th:href="@{/dashboard}">Volver al dashboard</a></p>
+</main>
+</body>
+</html>

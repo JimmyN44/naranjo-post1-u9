@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Registro')}"></head>
+<body>
+<main class="contenedor estrecho">
+    <h1>Registro de Usuario</h1>
+    <form th:action="@{/registro}" th:object="${registro}" method="post" class="tarjeta">
+        <label>Nombre:
+            <input type="text" th:field="*{nombre}" maxlength="100" required />
+        </label>
+        <div class="error-campo" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+
+        <label>Correo:
+            <input type="email" th:field="*{email}" maxlength="150" required />
+        </label>
+        <div class="error-campo" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+        <label>Contraseña (mínimo 8 caracteres):
+            <input type="password" th:field="*{contrasenia}" minlength="8" maxlength="72" required />
+        </label>
+        <div class="error-campo" th:if="${#fields.hasErrors('contrasenia')}" th:errors="*{contrasenia}"></div>
+
+        <!--/* El token CSRF se agrega automaticamente por th:action */-->
+        <button type="submit">Registrarse</button>
+    </form>
+    <p><a th:href="@{/login}">¿Ya tiene cuenta? Iniciar sesión</a></p>
+</main>
+</body>
+</html>

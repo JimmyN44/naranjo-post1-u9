@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Iniciar Sesión')}"></head>
+<body>
+<main class="contenedor estrecho">
+    <h1>Iniciar Sesión</h1>
+    <!--/* Spring Security procesa el POST a /login automaticamente */-->
+    <form th:action="@{/login}" method="post" class="tarjeta">
+        <div th:if="${param.error}" class="alerta error">
+            Correo o contraseña incorrectos.
+        </div>
+        <div th:if="${param.logout}" class="alerta ok">Sesión cerrada correctamente.</div>
+        <div th:if="${param.registrado}" class="alerta ok">Registro exitoso. Inicie sesión.</div>
+        <label>Correo: <input type="email" name="username" required autofocus /></label>
+        <label>Contraseña: <input type="password" name="password" required /></label>
+        <!--/* Thymeleaf + Spring Security incluye el token CSRF automaticamente */-->
+        <button type="submit">Ingresar</button>
+    </form>
+    <p><a th:href="@{/registro}">¿No tiene cuenta? Registrarse</a></p>
+</main>
+</body>
+</html>

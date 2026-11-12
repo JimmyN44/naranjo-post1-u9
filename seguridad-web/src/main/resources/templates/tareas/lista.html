@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Tareas')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<main class="contenedor">
+    <h1 th:text="${esAdmin} ? 'Todas las tareas (ADMIN)' : 'Mis tareas'">Tareas</h1>
+
+    <div th:if="${mensaje}" class="alerta ok" th:text="${mensaje}"></div>
+
+    <!--/* Buscador: usa @Query parametrizado (prueba de SQL Injection).
+         Una entrada como ' OR '1'='1 se trata como texto literal. */-->
+    <form th:action="@{/tareas}" method="get" class="buscador">
+        <input type="text" name="q" th:value="${q}" placeholder="Buscar por título" />
+        <button type="submit">Buscar</button>
+        <a th:if="${q}" th:href="@{/tareas}">Limpiar</a>
+    </form>
+    <p th:if="${q}" id="resultado-busqueda">
+        Resultados para "<span th:text="${q}"></span>":
+        <strong th:text="${#lists.size(tareas)}">0</strong> tarea(s)
+    </p>
+
+    <table th:if="${!#lists.isEmpty(tareas)}" class="tabla">
+        <thead>
+        <tr>
+            <th>ID</th><th>Título</th><th>Descripción</th>
+            <th th:if="${esAdmin}">Propietario</th>
+            <th>Estado</th><th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="t : ${tareas}">
+            <td th:text="${t.id}"></td>
+            <!--/* th:text en todos los campos escritos por usuarios */-->
+            <td th:text="${t.titulo}"></td>
+            <td th:text="${t.descripcion}"></td>
+            <td th:if="${esAdmin}" th:text="${t.propietario.email}"></td>
+            <td th:text="${t.completada} ? 'Completada' : 'Pendiente'"></td>
+            <td class="acciones-fila">
+                <form th:action="@{/tareas/{id}/completar(id=${t.id})}" method="post" class="inline">
+                    <button type="submit" class="btn-secundario"
+                            th:text="${t.completada} ? 'Reabrir' : 'Completar'">Completar</button>
+                </form>
+                <form th:action="@{/tareas/{id}/eliminar(id=${t.id})}" method="post" class="inline">
+                    <button type="submit" class="btn-peligro">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p th:if="${#lists.isEmpty(tareas)}">No hay tareas para mostrar.</p>
+
+    <h2>Nueva tarea</h2>
+    <form th:action="@{/tareas}" th:object="${tareaForm}" method="post" class="tarjeta">
+        <label>Título:
+            <input type="text" th:field="*{titulo}" maxlength="150" required />
+        </label>
+        <div class="error-campo" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+        <label>Descripción:
+            <textarea th:field="*{descripcion}" maxlength="500" rows="3"></textarea>
+        </label>
+        <div class="error-campo" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
+        <button type="submit">Crear tarea</button>
+    </form>
+</main>
+</body>
+</html>

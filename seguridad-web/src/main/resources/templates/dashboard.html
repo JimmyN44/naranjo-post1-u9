@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<main class="contenedor">
+    <h1>Dashboard</h1>
+
+    <!--/* SEGURO (version final que queda en el commit): th:text escapa el
+         contenido. Si usuario (el nombre) es "<script>alert(1)</script>",
+         Thymeleaf lo renderiza como &lt;script&gt;alert(1)&lt;/script&gt;
+         y el navegador lo muestra como texto plano, sin ejecutarlo. */-->
+    <p id="bienvenida">Bienvenido, <span th:text="${usuario}"></span></p>
+
+    <!--/* Prueba XSS del Paso 8 (Checkpoint 2): la variante SIN escape se
+         agrega aqui solo de forma temporal y se revierte antes del commit.
+         El procedimiento exacto esta en el README, seccion "Pruebas de
+         seguridad > XSS". Este comentario es de Thymeleaf (parser-level),
+         por lo que no se envia al navegador. */-->
+
+    <p>Correo: <span th:text="${email}"></span></p>
+    <p>Roles:
+        <span th:each="rol : ${roles}" class="etiqueta" th:text="${rol.authority}"></span>
+    </p>
+
+    <ul class="acciones">
+        <li><a th:href="@{/tareas}">Mis tareas</a></li>
+        <!--/* Solo visible para ADMIN */-->
+        <li sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin}">Panel de Administración</a>
+        </li>
+    </ul>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Cerrar Sesión</button>
+    </form>
+</main>
+</body>
+</html>

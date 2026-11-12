@@ -1,0 +1,33 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, Arial, sans-serif; background: #f4f6f8; color: #1f2933; }
+.contenedor { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+.contenedor.estrecho { max-width: 420px; }
+h1 { margin-top: 0; }
+a { color: #1d4ed8; }
+
+.nav { display: flex; gap: 16px; align-items: center; background: #1f2933; padding: 10px 16px; }
+.nav a { color: #fff; text-decoration: none; }
+.nav-usuario { margin-left: auto; color: #cbd2d9; font-size: .9em; }
+
+.tarjeta { background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1);
+           display: flex; flex-direction: column; gap: 10px; }
+label { display: flex; flex-direction: column; gap: 4px; font-size: .95em; }
+input, textarea { padding: 8px; border: 1px solid #cbd2d9; border-radius: 4px; font: inherit; }
+
+button { padding: 8px 14px; border: 0; border-radius: 4px; background: #1d4ed8; color: #fff; cursor: pointer; }
+.btn-secundario { background: #52606d; }
+.btn-peligro { background: #b91c1c; }
+form.inline { display: inline; margin: 0; }
+
+.alerta { padding: 8px 12px; border-radius: 4px; }
+.alerta.error { background: #fde8e8; color: #9b1c1c; }
+.alerta.ok { background: #def7ec; color: #03543f; }
+.error-campo { color: #b91c1c; font-size: .85em; }
+
+.tabla { width: 100%; border-collapse: collapse; background: #fff; margin-bottom: 16px; }
+.tabla th, .tabla td { padding: 8px; border-bottom: 1px solid #e4e7eb; text-align: left; vertical-align: top; }
+.acciones-fila { white-space: nowrap; }
+.etiqueta { display: inline-block; background: #e0e7ff; padding: 2px 8px; border-radius: 10px; margin-right: 4px; }
+.buscador { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+.buscador input { flex: 1; }
+.acciones { padding-left: 18px; }

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Panel de Administración')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<main class="contenedor">
+    <h1>Panel de Administración</h1>
+    <div th:if="${mensaje}" class="alerta ok" th:text="${mensaje}"></div>
+
+    <h2>Usuarios registrados</h2>
+    <table class="tabla" id="tabla-usuarios">
+        <thead>
+        <tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Activo</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${usuarios}">
+            <td th:text="${u.id}"></td>
+            <td th:text="${u.nombre}"></td>
+            <td th:text="${u.email}"></td>
+            <td th:text="${u.rol}"></td>
+            <td th:text="${u.activo} ? 'Sí' : 'No'"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Todas las tareas</h2>
+    <table class="tabla" id="tabla-tareas" th:if="${!#lists.isEmpty(tareas)}">
+        <thead>
+        <tr><th>ID</th><th>Título</th><th>Propietario</th><th>Estado</th><th>Acciones</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="t : ${tareas}">
+            <td th:text="${t.id}"></td>
+            <td th:text="${t.titulo}"></td>
+            <td th:text="${t.propietario.email}"></td>
+            <td th:text="${t.completada} ? 'Completada' : 'Pendiente'"></td>
+            <td>
+                <form th:action="@{/tareas/{id}/eliminar(id=${t.id})}" method="post" class="inline">
+                    <input type="hidden" name="origen" value="admin" />
+                    <button type="submit" class="btn-peligro">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p th:if="${#lists.isEmpty(tareas)}">No hay tareas registradas.</p>
+</main>
+</body>
+</html>
