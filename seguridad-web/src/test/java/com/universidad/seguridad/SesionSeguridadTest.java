@@ -17,7 +17,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/** Parte 1: sesion, BCrypt, roles, XSS, SQL Injection y CSRF en las vistas web. */
 class SesionSeguridadTest extends IntegracionBase {
 
     @Nested
@@ -52,7 +51,6 @@ class SesionSeguridadTest extends IntegracionBase {
 
             assertThat(usuarioRepo.findByEmail("atacante@universidad.edu").orElseThrow().getRol())
                     .isEqualTo(Usuario.ROL_USER);
-            // El ADMIN original no fue sobrescrito
             assertThat(usuarioRepo.findById(admin.getId()).orElseThrow().getEmail()).isEqualTo(ADMIN_EMAIL);
         }
 
