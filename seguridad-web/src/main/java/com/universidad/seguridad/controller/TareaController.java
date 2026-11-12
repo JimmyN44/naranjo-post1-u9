@@ -15,10 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-/**
- * Gestion de tareas en las vistas web (cadena de sesion, CSRF activo).
- * Incluye el buscador usado para la verificacion de SQL Injection.
- */
+
 @Controller
 @RequestMapping("/tareas")
 public class TareaController {
@@ -40,7 +37,6 @@ public class TareaController {
 
         List<Tarea> tareas;
         if (hayBusqueda) {
-            // @Query parametrizado: "' OR '1'='1" se trata como texto literal
             tareas = admin ? tareaService.buscar(q) : tareaService.buscarDe(q, actual.getId());
         } else {
             tareas = admin ? tareaService.listarTodas() : tareaService.listarDe(actual.getId());
