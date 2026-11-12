@@ -26,9 +26,8 @@ public class Usuario {
 
     @NotBlank
     @Column(nullable = false)
-    private String contrasenia; // BCrypt hash - nunca texto claro
+    private String contrasenia; 
 
-    // "ROLE_ADMIN" o "ROLE_USER"
     @NotBlank
     @Column(nullable = false, length = 20)
     private String rol;
