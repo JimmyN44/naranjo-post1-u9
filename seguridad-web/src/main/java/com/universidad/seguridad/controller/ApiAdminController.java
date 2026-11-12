@@ -11,11 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * Endpoints de administracion de la API. Protegidos dos veces:
- * la regla "/api/admin/**" -> hasRole("ADMIN") de apiFilterChain
- * y @PreAuthorize("hasRole('ADMIN')") en los metodos de servicio.
- */
 @RestController
 @RequestMapping("/api/admin")
 public class ApiAdminController {
